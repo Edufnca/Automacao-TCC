@@ -2,51 +2,51 @@ import mysql.connector
 from Dicionario import *
 
 conexao = mysql.connector.connect(
-    host='containers-us-west-209.railway.app',
-    user='root',
-    password='3qe4hYKN5vC9qQg1jA92',
-    port='5686',
-    database='railway',
+    host='192.168.0.90',
+    user='pma',
+    password='Franca21',
+    port='3307',
+    database='TCC',
     charset='utf8mb4'
 )
 cursor = conexao.cursor()
 
 # TABELAS: anotacao, aula, compromisso, prova, tarefa
 
-def add_prova(codigo, assunto, materia, data, dia_da_semana):
+def add_prova(assunto, materia, data, dia_da_semana, aula):
     if dia_da_semana in dia_semana:
         try:
-            comando_add_prova = f"INSERT INTO prova (codigo, assunto, materia, data, dia_da_semana ) VALUES ({codigo}, '{assunto}', '{materia}', {data}, '{dia_da_semana}')"
+            comando_add_prova = f'INSERT INTO prova (assunto, materia, data, dia_da_semana, aula ) VALUES ("{assunto}", "{materia}", {data}, "{dia_da_semana}", {aula})'
             cursor.execute(comando_add_prova)
             conexao.commit()
             cursor.close()
             conexao.close()
-            return "Prova salva com sucesso!!"
+            return "✅ Prova salva com sucesso!"
         except:
-            msg_erro = 'Erro ao inserir prova'
+            msg_erro = '❌ Erro ao inserir prova.'
             return msg_erro
-    else: return "digite um dia da semana: Segunda, Terça, Quarta, Quinta, Sexta, Sabado, Domingo"
+    else: return "Digite um dia da semana: Segunda, Terça, Quarta, Quinta, Sexta, Sabado, Domingo"
 
-def add_tarefa(codigo, descricao, data_inicial,data_final , materia):
+def add_tarefa(descricao, data, materia):
     try:
-        comando_add_tarefa = f'INSERT INTO tarefa (codigo, descricao, data, materia) VALUES ("{codigo}, "{descricao}", {data_inicial}, {data_final}, "{materia}")'
+        comando_add_tarefa = f'INSERT INTO tarefa (descricao, data, materia) VALUES ("{descricao}", {data}, "{materia}")'
         cursor.execute(comando_add_tarefa)
         conexao.commit()
         cursor.close()
         conexao.close()
     except:
-        msg_erro = 'Erro ao inserir tarefa'
+        msg_erro = '❌ Erro ao inserir tarefa.'
         return msg_erro
 
-def add_compromomisso(id, nome, data, descricao):
+def add_compromomisso(nome, data, descricao):
     try:
-        comando_add_compromisso = f'INSERT INTO compromisso (id, nome, data, descricao ) VALUES ("{id}","{nome}", {data},"{descricao}")'
+        comando_add_compromisso = f'INSERT INTO compromisso (nome, data, descricao ) VALUES ("{nome}", {data},"{descricao}")'
         cursor.execute(comando_add_compromisso)
         conexao.commit()
         cursor.close()
         conexao.close()
     except:
-        msg_erro = 'Erro ao inserir compromisso'
+        msg_erro = '❌ Erro ao inserir compromisso.'
         return msg_erro
 
 def add_anotacao(data, nome, anotacao):
@@ -57,18 +57,18 @@ def add_anotacao(data, nome, anotacao):
         cursor.close()
         conexao.close()
     except:
-        msg_erro = 'Erro ao inserir anotação'
+        msg_erro = '❌ Erro ao inserir anotação.'
         return msg_erro
 
-def add_aula(id, aula, horario_inicial, horario_final, materia, dia_da_semana, sala):
+def add_aula(aula, horario_inicial, horario_final, materia, dia_da_semana, sala):
     try:
-        comando = f"INSERT INTO aula (id, aula, horario_inicial, horario_final, materia, dia_da_semana, sala) VALUES {id}, '{aula}',{horario_inicial}, {horario_final}, '{materia}', '{dia_da_semana}', {sala} "
+        comando = f'INSERT INTO aula (aula, horario_inicial, horario_final, materia, dia_da_semana, sala) VALUES {aula},{horario_inicial}, {horario_final}, "{materia}", "{dia_da_semana}", {sala}'
         cursor.execute(comando)
         conexao.commit()
         cursor.close()
         conexao.close()
     except:
-        msg_erro = 'Erro ao inserir aula'
+        msg_erro = '❌ Erro ao inserir aula.'
         return msg_erro
 
 def read_bd(atributo, tabela):
@@ -88,10 +88,10 @@ def read_parametro_txt(atributo,tabela, condicao, parametro):
         if resultado is not None:
             return resultado
         else:
-            msg_erro = 'nada selecionado'
+            msg_erro = '❌ Nada selecionado!'
             return msg_erro
     except:
-        msg_erro = 'erro ao selecionar a linha da tabela'
+        msg_erro = '❌ Erro ao selecionar a linha da tabela.'
         return msg_erro
 
 def read_parametro_int(atributo,tabela, condicao, parametro):
@@ -103,10 +103,10 @@ def read_parametro_int(atributo,tabela, condicao, parametro):
         if resultado is not None:
             return resultado
         else:
-            msg_erro = 'nada selecionado'
+            msg_erro = '❌ Nada selecionado!'
             return msg_erro
     except:
-        msg_erro = 'erro ao selecionar a linha da tabela aula'
+        msg_erro = '❌ Erro ao selecionar a linha da tabela aula.'
         return msg_erro
 
 def delete_bd(tabela):
@@ -117,18 +117,18 @@ def delete_bd(tabela):
         cursor.close()
         conexao.close()
     except:
-        msg_erro = 'erro ao apagar tabela'
+        msg_erro = '❌ Erro ao apagar tabela.'
         return msg_erro
 
 def delete_parametro_txt(tabela, condicao, parametro):
     try:
         comando = f'DELETE FROM {tabela} WHERE "{condicao}" = "{parametro}"'
-        cursor.execute(comando)
+        cursor.execute(comando) 
         conexao.commit()
         cursor.close()
         conexao.close()
     except:
-        msg_erro = 'erro ao apagar tabela'
+        msg_erro = '❌ Erro ao apagar tabela.'
         return msg_erro
 
 def delete_parametro_int(tabela, condicao, parametro):
@@ -139,7 +139,7 @@ def delete_parametro_int(tabela, condicao, parametro):
         cursor.close()
         conexao.close()
     except:
-        msg_erro = 'erro ao apagar a tabela'
+        msg_erro = '❌ Erro ao apagar a tabela.'
         return msg_erro
       
 def update_txt(tabela, novo_valor, condicao, parametro):
@@ -150,7 +150,7 @@ def update_txt(tabela, novo_valor, condicao, parametro):
         cursor.close()
         conexao.close()
     except:
-        msg_erro = 'erro ao atualizar a tabela'
+        msg_erro = '❌ Erro ao atualizar a tabela.'
         return msg_erro
 
 def update_int(tabela, novo_valor, condicao, parametro):
@@ -161,5 +161,5 @@ def update_int(tabela, novo_valor, condicao, parametro):
         cursor.close()
         conexao.close()
     except:
-        msg_erro = 'erro ao atualizar a tabela'
+        msg_erro = '❌ Erro ao atualizar a tabela.'
         return msg_erro
